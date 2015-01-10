@@ -65,9 +65,12 @@ class SphinxDocTestFinder(object):
                     code[0].code, output, exc_msg=exc_msg,
                     lineno=code[0].lineno, options=options,
                 )
+                # The test's globals will be swapped out later during test
+                # setup, so the globs parameter here has no use at all, and an
+                # empty dict is enough.
                 test = doctest.DocTest(
-                    [example], {}, self.group.name,
-                    self.filename, code[0].lineno, None,
+                    [example], {}, self.group.name, self.filename,
+                    code[0].lineno, None,
                 )
                 test.compile_type = 'exec'
             test.group = self.group

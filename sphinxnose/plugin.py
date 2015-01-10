@@ -6,7 +6,6 @@ import os
 
 import six
 from nose.plugins import Plugin
-from six.moves import builtins
 
 from .finders import SphinxDocTestFinder
 from .sphinx import collect_sphinx_doctests
@@ -24,6 +23,15 @@ class CodeExecutor(object):
 
 
 executor = CodeExecutor()
+
+
+class UnclearableDict(dict):
+
+    def clear(self):
+        pass    # You shall not clear!
+
+    def copy(self):
+        return UnclearableDict(super(UnclearableDict, self).copy())
 
 
 class SphinxDoctest(Plugin):
@@ -117,7 +125,7 @@ class SphinxDoctest(Plugin):
 
         for docname, group in groups:
             # All tests in a group share their global context.
-            group.globs = {'__builtins__': builtins.__dict__}
+            group.globs = UnclearableDict()
 
             def build_setup_teardown(fname, group, before=False, after=False):
 
