@@ -70,7 +70,7 @@ Using a previously-defined function:
     >>> print(get_ship(prefix='USS', suffix='(NCC-1701)'))
     USS Enterprise (NCC-1701)
 
-Now, to boldly go where no-one has gone before:
+To boldly go where no-one has gone before:
 
 .. doctest::
 
@@ -80,7 +80,7 @@ Now, to boldly go where no-one has gone before:
     ...     return captains[:]
     ...
 
-This works fine. The function itself is not the problem.
+Let's use it.
 
 .. testcode::
 
@@ -93,7 +93,7 @@ This works fine. The function itself is not the problem.
     Sulu
     Riker
 
-But for some reason, functions in doctests do not inherit variable scopes from parents!
+Of course, ``doctest`` block also works.
 
 .. doctest::
 
@@ -106,7 +106,7 @@ But for some reason, functions in doctests do not inherit variable scopes from p
     Janeway
     Archer
 
-Another function to illustrate the problem:
+Another function, this one using both user-defined global variable *and* a builtin global:
 
 .. testcode::
 
@@ -115,14 +115,10 @@ Another function to illustrate the problem:
             captains = captain_list
         return len(captains)
 
-This fails, too. Builtin functions cannot be used (because they are not in the local scope inside the function).
-
 .. doctest::
 
     >>> count_captains(['Sulu'])
     1
-
-And this too. This does not use the inherited global variables, so you can be sure that the builtin names are the problem (here ``len`` is missing).
 
 .. testcode::
 
