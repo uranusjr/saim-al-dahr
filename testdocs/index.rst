@@ -127,3 +127,21 @@ Another function, this one using both user-defined global variable *and* a built
 .. testoutput::
 
     5
+
+Yet another one. This uses a global that will be defined later:
+
+.. doctest::
+
+    >>> def the_answer_to_life_and_universe_and_everything():
+    ...     print(the_answer)
+    ...
+
+Now use it. You can see the global variable working bacakwards.
+
+.. doctest::
+
+    >>> the_answer = 42
+    >>> the_answer_to_life_and_universe_and_everything()
+    42
+
+Global variables works

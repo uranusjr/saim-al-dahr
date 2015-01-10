@@ -139,9 +139,8 @@ class SphinxDoctest(Plugin):
             def build_setup_teardown(fname, group, before=False, after=False):
 
                 def func(test):
-                    if before:
-                        # Copy things from previous tests into current context.
-                        test.globs = group.globs.copy()
+                    # All tests in a group share their global context.
+                    test.globs = group.globs
 
                     # Set type for the monkey-patched compile function.
                     executor.compile_type = test.compile_type
@@ -156,17 +155,13 @@ class SphinxDoctest(Plugin):
                             test.globs,
                         )
 
-                    if after:
-                        # Copy out things from current context for later tests.
-                        group.globs = test.globs.copy()
-
                 func.__name__ = fname
                 return func
 
             suite = doctest.DocTestSuite(
                 test_finder=SphinxDocTestFinder(docname, group),
-                setUp=build_setup_teardown('setup', group, before=True),
-                tearDown=build_setup_teardown('teardown', group, after=True),
+                setUp=build_setup_teardown('setup', group),
+                tearDown=build_setup_teardown('teardown', group),
             )
             yield suite
 
