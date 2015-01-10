@@ -25,8 +25,17 @@ class CodeExecutor(object):
 executor = CodeExecutor()
 
 
+# TODO: Will the user want to mess with the globals backing store? Can't
+# think of a scenario now, but still. Maybe we should monkey-patch the
+# clearing behavior instead after all.
 class UnclearableDict(dict):
+    """An "unclearble" dict type.
 
+    This is designed to work aroung the builtin doctest's behavior of clearing
+    tests' globals after running them. Only clear() is disabled, while the
+    __delitem__() magic method is untouched, so that ``del foo`` still would
+    work in user's code.
+    """
     def clear(self):
         pass    # You shall not clear!
 
