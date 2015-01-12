@@ -32,7 +32,7 @@ clean-test:
 	rm -fr htmlcov/
 
 lint:
-	flake8 sphinxnose tests
+	flake8 sphinxnose tests.py
 
 test:
 	python -m tests
