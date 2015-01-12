@@ -3,18 +3,19 @@
 
 from setuptools import find_packages, setup
 
+import sphinxnose
 
 readme = open('README.rst').read()
 
 requirements = open('requirements.txt').read().strip().split('\n')
 
 setup(
-    name="Sa'im al-Dahr",
-    version='0.1.0',
+    name='sphinx-nose',
+    version=sphinxnose.__version__,
     description='Run Sphinx doctests in Nose.',
     long_description=readme,
-    author='Tzu-ping Chung',
-    author_email='uranusjr@gmail.com',
+    author=sphinxnose.__author__,
+    author_email=sphinxnose.__email__,
     url='https://github.com/uranusjr/saim-al-dahr',
     packages=find_packages(),
     include_package_data=True,
