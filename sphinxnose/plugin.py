@@ -25,22 +25,15 @@ class CodeExecutor(object):
 executor = CodeExecutor()
 
 
-# TODO: Will the user want to mess with the globals backing store? Can't
-# think of a scenario now, but still. Maybe we should monkey-patch the
-# clearing behavior instead after all.
-class UnclearableDict(dict):
-    """An "unclearble" dict type.
+class DocTestCase(doctest.DocTestCase):
+    """Custom DocTestCast that does not clear globals after tests are run.
 
-    This is designed to work aroung the builtin doctest's behavior of clearing
-    tests' globals after running them. Only clear() is disabled, while the
-    __delitem__() magic method is untouched, so that ``del foo`` still would
-    work in user's code.
+    Built-in doctest's implemetation clears test's globals on tear down. We
+    override the method to prevent that.
     """
-    def clear(self):
-        pass    # You shall not clear!
-
-    def copy(self):
-        return UnclearableDict(super(UnclearableDict, self).copy())
+    def tearDown(self):
+        if self._dt_tearDown is not None:
+            self._dt_tearDown(self._dt_test)
 
 
 class SphinxDoctest(Plugin):
@@ -100,6 +93,11 @@ class SphinxDoctest(Plugin):
             pass
         doctest.compile = executor.compile
 
+        # Monkey-patch doctest's DocTestCase to prevent globals being cleared.
+        # See DocTestCase's implementation.
+        self.DocTestCase = doctest.DocTestCase
+        doctest.DocTestCase = DocTestCase
+
     def finalize(self, result):
         """Run after end of "the" test.
 
@@ -110,6 +108,7 @@ class SphinxDoctest(Plugin):
             doctest.compile = self.old_compile
         except AttributeError:
             del doctest.compile
+        doctest.DocTestCase = self.DocTestCase
 
     def wantDirectory(self, dirname):
         """Specify directories we want.
@@ -134,7 +133,7 @@ class SphinxDoctest(Plugin):
 
         for docname, group in groups:
             # All tests in a group share their global context.
-            group.globs = UnclearableDict()
+            group.globs = {}
 
             def build_setup_teardown(fname, group, before=False, after=False):
 
