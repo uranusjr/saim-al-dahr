@@ -9,7 +9,7 @@ requirements = open('requirements.txt').read().strip().split('\n')
 
 setup(
     name='sphinx-nose',
-    version='0.1.0',
+    version='0.2.0',
     description='Run Sphinx doctests in Nose.',
     long_description=readme,
     author='Tzu-ping Chung',
