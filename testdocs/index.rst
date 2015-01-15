@@ -143,5 +143,3 @@ Now use it. You can see the global variable working bacakwards.
     >>> the_answer = 42
     >>> the_answer_to_life_and_universe_and_everything()
     42
-
-Global variables works
