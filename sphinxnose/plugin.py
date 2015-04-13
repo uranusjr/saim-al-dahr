@@ -157,11 +157,14 @@ class SphinxDoctest(Plugin):
                 func.__name__ = fname
                 return func
 
-            suite = doctest.DocTestSuite(
-                test_finder=SphinxDocTestFinder(docname, group),
-                setUp=build_setup_teardown('setup', group),
-                tearDown=build_setup_teardown('teardown', group),
-            )
+            try:
+                suite = doctest.DocTestSuite(
+                    test_finder=SphinxDocTestFinder(docname, group),
+                    setUp=build_setup_teardown('setup', group),
+                    tearDown=build_setup_teardown('teardown', group),
+                )
+            except ValueError:  # No docstring. Ignore.
+                continue
             yield suite
 
     def _get_sphinx_dirs(self, path):
