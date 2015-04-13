@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sphinxnose
 from setuptools import find_packages, setup
 
 readme = open('README.rst').read()
@@ -9,7 +10,7 @@ requirements = open('requirements.txt').read().strip().split('\n')
 
 setup(
     name='sphinx-nose',
-    version='0.2.0',
+    version=sphinxnose.__version__,
     description='Run Sphinx doctests in Nose.',
     long_description=readme,
     author='Tzu-ping Chung',
